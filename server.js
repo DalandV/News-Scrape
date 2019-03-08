@@ -27,9 +27,9 @@ var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/newsdb";
 mongoose.connect(MONGODB_URI);
 
 // Routes
-require("./routes/htmlRoutes")(app); 
+require("./routes/htmlRoutes")(app);
 
 // Start the server
 app.listen(PORT, function() {
-    console.log("App running on port " + PORT + "!");
-  });
+  console.log("App running on port " + PORT + "!");
+});
