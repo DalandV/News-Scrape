@@ -8,30 +8,39 @@ module.exports = function(app) {
   });
   app.get("/scrape", function(req, res) {
     axios.get("https://www.npr.org/sections/news/").then(function(response) {
-      var $ = cheerio.load(response.data);
-      $("h2.title").each(function(i, element) {
-        // Save an empty result object
-        var result = {};
+      db.Article.remove({}, function(err) {
+        console.log("collection removed");
+      })
+        .then(function() {
+          var $ = cheerio.load(response.data);
+          $("h2.title").each(function(i, element) {
+            // Save an empty result object
+            var result = {};
 
-        // Add the text and href of every link, and save them as properties of the result object
-        result.title = $(this)
-          .children("a")
-          .text();
-        result.link = $(this)
-          .children("a")
-          .attr("href");
-        console.log(result);
-        db.Article.create(result)
-          .then(function(dbArticle) {
-            // View the added result in the console
-            console.log(dbArticle);
-          })
-          .catch(function(err) {
-            // If an error occurred, send it to the client
-            return res.json(err);
+            // Add the text and href of every link, and save them as properties of the result object
+            result.title = $(this)
+              .children("a")
+              .text();
+            result.link = $(this)
+              .children("a")
+              .attr("href");
+            console.log(result);
+            db.Article.create(result)
+              .then(function(dbArticle) {
+                // View the added result in the console
+                console.log(dbArticle);
+              })
+              .catch(function(err) {
+                // If an error occurred, send it to the client
+                return res.json(err);
+              });
           });
-      });
-      res.send("Scrape Complete")
+        })
+        .catch(function(err) {
+          // If an error occurred, send it to the client
+          return res.json(err);
+        });
+      res.send("Scrape Complete");
     });
   });
 };
