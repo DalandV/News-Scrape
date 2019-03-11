@@ -4,7 +4,7 @@ var cheerio = require("cheerio");
 
 module.exports = function(app) {
   app.get("/", function(req, res) {
-    res.render("index");
+    res.render("home");
   });
   app.get("/scrape", function(req, res) {
     axios.get("https://www.npr.org/sections/news/").then(function(response) {
