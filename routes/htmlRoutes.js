@@ -6,6 +6,11 @@ module.exports = function(app) {
   app.get("/", function(req, res) {
     res.render("home");
   });
+
+  app.get("/saved", function(req, res) {
+    res.render("saved");
+  });
+  
   app.get("/scrape", function(req, res) {
     axios.get("https://www.npr.org/sections/news/").then(function(response) {
       db.Article.remove({}, function(err) {
